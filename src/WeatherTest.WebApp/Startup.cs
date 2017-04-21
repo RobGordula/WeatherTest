@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using WeatherTest.WebApp.Models;
+using WeatherTest.WebApp.Services;
 
 namespace WeatherTest.WebApp
 {
@@ -24,12 +25,13 @@ namespace WeatherTest.WebApp
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddOptions();
-
-			services.Configure<WeatherProviders>(Configuration.GetSection("WeatherProviders"));
+			services.Configure<WeatherProviders>(
+				options => Configuration.GetSection("WeatherProviders").Bind(options));
 
 			// Add framework services.
 			services.AddMvc();
+
+			services.AddTransient<IWeatherChecker, WeatherChecker>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

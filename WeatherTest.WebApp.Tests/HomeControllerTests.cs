@@ -18,7 +18,7 @@ namespace WeatherTest.WebApp.Tests
 			// Arrange
 			var weatherChecker = new Mock<IWeatherChecker>();
 			weatherChecker
-				.Setup(wc => wc.CheckAsync(string.Empty))
+				.Setup(wc => wc.CheckAsync("bournemouth"))
 				.Returns(
 					Task.FromResult(
 						new List<WeatherCheckResponse>

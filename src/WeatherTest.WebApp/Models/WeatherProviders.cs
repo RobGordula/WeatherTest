@@ -4,6 +4,6 @@ namespace WeatherTest.WebApp.Models
 {
 	public class WeatherProviders
 	{
-		public IEnumerable<WeatherProvider> Providers { get; set; }
+		public List<WeatherProvider> Providers { get; set; } = new List<WeatherProvider>();
 	}
 }
