@@ -1,0 +1,10 @@
+﻿@model UnitOfMeasureViewModel
+
+<form class="form-inline">
+	<div class="form-group">
+		<label asp-for="TemperatureUnit"></label>
+		<select asp-for="TemperatureUnit" asp-items="Model.TemperatureUnits" class="form-control"></select>
+		<label asp-for="WindSpeedUnit"></label>
+		<select asp-for="WindSpeedUnit" asp-items="Model.WindSpeedUnits" class="form-control"></select>
+	</div>
+</form>

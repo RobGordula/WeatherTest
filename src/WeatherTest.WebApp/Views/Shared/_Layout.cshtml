@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>@ViewData["Title"] - 4Com Weather</title>
+	<title>@ViewData["Title"] - 4Com</title>
 
 	<environment names="Development">
 		<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -29,27 +29,10 @@
 					<span class="icon-bar"></span>
 				</button>
 				<a href="#" class="navbar-brand"><strong>WEATHER</strong></a>
-				<div class="navbar-collapse collapse" style="float:right;margin-top:8px">
+				<div class="navbar-collapse collapse navbar-right" style="margin-top:8px">
 					<ul class="nav navbar-nav">
 						<li>
-							<div class="btn-toolbar">
-								<div class="btn-group" role="group" data-toggle="buttons" aria-label="Temperature Unit Toggle">
-									<label class="btn btn-primary active">
-										<input type="radio" name="temp" id="cel" autocomplete="off" checked> &deg;C
-									</label>
-									<label class="btn btn-primary">
-										<input type="radio" name="temp" id="far" autocomplete="off"> &deg;F
-									</label>
-								</div>
-								<div class="btn-group" role="group" data-toggle="buttons" aria-label="Wind Speed Unit Toggle">
-									<label class="btn btn-primary active">
-										<input type="radio" name="speed" id="kph" autocomplete="off" checked> kph
-									</label>
-									<label class="btn btn-primary">
-										<input type="radio" name="speed" id="mph" autocomplete="off"> mph
-									</label>
-								</div>
-							</div>
+							@await Component.InvokeAsync("UnitOfMeasure", new { temperatureUnit = "Cel", windSpeedUnit = "mph" })
 						</li>
 					</ul>
 				</div>

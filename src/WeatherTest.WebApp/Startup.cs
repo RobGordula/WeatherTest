@@ -27,6 +27,9 @@ namespace WeatherTest.WebApp
 		{
 			services.Configure<WeatherProviders>(
 				options => Configuration.GetSection("WeatherProviders").Bind(options));
+			services.Configure<UnitOfMeasure>(
+				options => Configuration.GetSection("UnitOfMeasure").Bind(options));
+
 
 			// Add framework services.
 			services.AddMvc();
