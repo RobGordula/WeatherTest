@@ -30,11 +30,11 @@ namespace WeatherTest.WebApp
 			services.Configure<UnitOfMeasure>(
 				options => Configuration.GetSection("UnitOfMeasure").Bind(options));
 
-
 			// Add framework services.
 			services.AddMvc();
 
 			services.AddTransient<IWeatherChecker, WeatherChecker>();
+			services.AddTransient<IUnitConversionService, UnitConversionService>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

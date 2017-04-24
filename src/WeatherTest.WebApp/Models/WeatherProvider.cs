@@ -6,8 +6,8 @@
 
 		public string EndPoint { get; set; }
 
-		public string TemperatureUnit { get; set; }
+		public Unit TemperatureUnit { get; set; }
 
-		public string WindSpeedUnit { get; set; }
+		public Unit WindSpeedUnit { get; set; }
 	}
 }

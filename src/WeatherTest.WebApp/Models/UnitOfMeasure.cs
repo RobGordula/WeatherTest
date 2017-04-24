@@ -4,8 +4,8 @@ namespace WeatherTest.WebApp.Models
 {
 	public class UnitOfMeasure
 	{
-		public List<TemperatureUnit> Temperature { get; set; }
+		public virtual List<Unit> Temperature { get; set; }
 
-		public List<string> WindSpeed { get; set; }
+		public virtual List<Unit> WindSpeed { get; set; }
 	}
 }

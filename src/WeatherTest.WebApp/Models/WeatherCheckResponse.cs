@@ -9,7 +9,11 @@ namespace WeatherTest.WebApp.Models
 	{
 		public string Location { get; set; }
 
+		public double TemperatureBaseUnitValue { get; set; }
+
 		public double Temperature { get; set; }
+
+		public double WindSpeedBaseUnitValue { get; set; }
 
 		public double WindSpeed { get; set; }
 
@@ -18,10 +22,10 @@ namespace WeatherTest.WebApp.Models
 		public WeatherProvider Provider { get; set; }
 
 		[JsonExtensionData]
-		private IDictionary<string, JToken> additionalData = new Dictionary<string, JToken>();
+		IDictionary<string, JToken> additionalData = new Dictionary<string, JToken>();
 
 		[OnDeserialized]
-		private void OnDeserialized(StreamingContext context)
+		void OnDeserialized(StreamingContext context)
 		{
 			foreach (var key in additionalData.Keys)
 			{

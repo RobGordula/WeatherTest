@@ -1,35 +1,29 @@
 # Weather Test
 
-4Com technical test for prospective .NET developers.
+Application to show my abilities as a .Net developer to [4Com](https://github.com/4Com/WeatherTest).
 
-## Prerequisites
+## Web Application
 
-* [Visual Studio 2017](https://www.microsoft.com/net/core#windowsvs2017) with ".NET Core cross-platform development" workload installed
-* [Git](https://git-scm.com/downloads)
+The web application displays average temperature and wind speed from the result of a query to weather APIs for a location.
 
-## Brief
+The application was creted using the ASP.NET Core Web Application template in Visual Studio 2017. Default authentication was used when the project was created.
 
-Create an application or website which given a location, will query the APIs provided in this repo and then display an aggregated weather result.
+![Web Application UI](ui.gif)
 
-We find this challenge normally takes a few hours to complete, however you may spend as much time as you would like to produce a result you are happy with and believe meets all the requirements.
-Your code should be written in a way that shows you have a good understanding of common software design patterns and SOLID principles.
-Should there be any aspects, which given more time you would have refactored, please add a README, or comments explaining what you would like to have done.
+The [layout](src/WeatherTest.WebApp/Views/Shared/_Layout.cshtml) from the application template was modified to have a selector for both the temperature and wind speed within the navigation section of the application. An input box with a search button was included in the navigation section as well.
 
-You should submit a link to your repository (GitHub, GitLab, BitBucket, etc), rather than a compiled application / link to the deployed website.
+The weather for Bournemouth with the temperature in &deg;C wind speed in mph is initially displayed when lauching the application. Subsequent queries are done via a full page post back.
 
-If you believe the brief is unclear in anyway or you have any questions please ask. 
+### Supported Unit of Measurement
 
-### Requirements
+A UnitOfMeasure section has been added into the [appsettings.json](src/WeatherTest.WebApp/appsettings.json) to allow for easily adding more unit of measure in the future, as well.
 
-Your application/website should:
+### Weather APIs
 
-* Display the aggregated (average) result, showing both temperature and wind speed, from any APIs it has queried
-* Allow the user to choose which measurement unit they want results displayed in. Wind should be MPH or KPH and temperature should be Celsius or Fahrenheit
-* Allow for more APIs to be easily added in the future
-* Allow for other units of measure to be easily added in the future
-* Gracefully handle one or more of the APIs being down or slow to respond
+A WeatherProviders section has been added into the [appsettings.json](src/WeatherTest.WebApp/appsettings.json) to allow for easily adding more APIs in the future.
 
-It should pass the following tests:
+### Weather Checker Service
 
-*	Given temperatures of 10c from bbc and 68f from accuweather when searching then display either 15c or 59f depending on what the user has chosen
-*	Given wind speeds of 8kph from bbc and 10mph from accuweather when searching then display either 12kph or 7.5mph depending on what the user has chosen
+CheckAsync method of the [weather checker service](src/WeatherTest.WebApp/Services/IWeatherChecker.cs) is called by the [Index action of the HomeController](src/WeatherTest.WebApp/Controllers/HomeController.cs) during startup or when a request for the weather for the supplied location. The method queries all available weather APIs and process individual responses as they arrive.
+
+During processing of a response, both the temperature and wind speed figures are converted into the base unit values if the response in not on the base unit already. The base unit values are then stored on a property on the response for further process later, after receiving all the responses.
