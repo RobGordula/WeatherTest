@@ -17,9 +17,9 @@ namespace WeatherTest.WebApp.Models
 
 		public string Location { get; }
 
-		public Measurement Temperature { get; private set; }
+		public Measurement Temperature { get; set; }
 
-		public Measurement WindSpead { get; private set; }
+		public Measurement WindSpead { get; set; }
 
 		public string BadRequestMessage { get; set; }
 

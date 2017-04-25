@@ -29,16 +29,18 @@ namespace WeatherTest.WebApp.Services
 
 			foreach (var unit in units)
 			{
-				if (!unit.IsBaseUnit)
-				{
-					var baseUnit = units.Single(u => u.MeasurementId == unit.MeasurementId && u.IsBaseUnit);
-					unit.SetBaseUnit(baseUnit);
-				}
+				var baseUnit = units.Single(u => u.MeasurementId == unit.MeasurementId && u.IsBaseUnit);
+				unit.SetBaseUnit(baseUnit);
 				unit.SetConvertTo(measures.Single(m => m.Id == unit.MeasurementId).ConvertFunc);
 			}
 		}
 
-		public Unit Find(Guid unitId) =>
-			units.Single(u => u.Id == unitId);
+		public Unit Find(Guid unitId)
+		{
+			if (unitId == null)
+				return null;
+
+			return units.SingleOrDefault(u => u.Id == unitId);
+		}
 	}
 }

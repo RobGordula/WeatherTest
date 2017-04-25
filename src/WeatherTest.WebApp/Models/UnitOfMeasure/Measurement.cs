@@ -22,7 +22,7 @@ namespace WeatherTest.WebApp.Models.UnitOfMeasure
 			Value = value;
 
 			if (!Unit.IsBaseUnit)
-				BaseValue = Unit.ConvertTo(Unit.BaseUnit, Value);
+				BaseValue = Unit.ConvertTo?.Invoke(Unit.BaseUnit, Value) ?? 0f;
 			else
 				BaseValue = Value;
 		}
@@ -30,6 +30,7 @@ namespace WeatherTest.WebApp.Models.UnitOfMeasure
 		public Measurement ConvertTo(Unit to)
 		{
 			Value = Unit.ConvertTo(to, Value);
+			Unit = to;
 			return this;
 		}
 

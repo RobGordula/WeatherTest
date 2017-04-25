@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using Moq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using WeatherTest.WebApp.Models;
 using WeatherTest.WebApp.Services;
@@ -10,10 +11,15 @@ namespace WeatherTest.WebApp.Tests
 {
 	public class WeatherCheckerTests : WebAppTests
 	{
-		protected readonly Mock<IOptions<WeatherProviders>> providersMock;
+		Mock<IUnitOfMeasurementsService> mockMeasurements;
 
-		public WeatherCheckerTests() =>
-			providersMock = mockRepo.Create<IOptions<WeatherProviders>>();
+		Mock<IOptions<List<WeatherProvider>>> mockProviders;
+
+		public WeatherCheckerTests()
+		{
+			mockMeasurements = mockRepo.Create<IUnitOfMeasurementsService>();
+			mockProviders = mockRepo.Create<IOptions<List<WeatherProvider>>>();
+		}
 
 		[Theory]
 		[InlineData(null)]
@@ -21,7 +27,7 @@ namespace WeatherTest.WebApp.Tests
 		public async Task CheckAsync_ReturnsAnEmptyCollectionOfResponses_WhenLocationIsNullOrEmpty(string location)
 		{
 			// Arrange
-			var sut = new WeatherChecker(providersMock.Object, unitsMock.Object, unitConverterMock.Object);
+			var sut = new WeatherChecker(mockMeasurements.Object, mockProviders.Object);
 
 			// Act
 			var result = await sut.CheckAsync(location);
@@ -38,19 +44,12 @@ namespace WeatherTest.WebApp.Tests
 		public async Task CheckAsync_ReturnsACollectionOfWeatherCheckResponses(string location)
 		{
 			// Arrange
-			var measuresMock = Mock.Get(unitsMock.Object.Value);
-			measuresMock.Setup(mm => mm.Temperature).Returns(new List<Unit> { cel, degF });
-			measuresMock.Setup(mm => mm.WindSpeed).Returns(new List<Unit> { kph, mph });
+			mockMeasurements.Setup(mm => mm.TemperatureUnits).Returns(TestData.Temperature);
+			mockMeasurements.Setup(mm => mm.WindSpeedUnits).Returns(TestData.WindSpeed);
 
-			unitsMock.Setup(um => um.Value).Returns(measuresMock.Object);
+			mockProviders.Setup(p => p.Value).Returns(TestData.Providers.Take(1).ToList());
 
-			providersMock.Setup(pm => pm.Value).Returns(providers);
-
-			unitConverterMock
-				.Setup(ucs => ucs.Convert(It.IsAny<Unit>(), It.IsAny<Unit>(), It.IsAny<double>()))
-				.Returns(It.IsAny<double>());
-
-			var sut = new WeatherChecker(providersMock.Object, unitsMock.Object, unitConverterMock.Object);
+			var sut = new WeatherChecker(mockMeasurements.Object, mockProviders.Object);
 
 			// Act
 			var result = await sut.CheckAsync(location);

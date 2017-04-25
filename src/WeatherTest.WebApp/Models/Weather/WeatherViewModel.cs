@@ -36,19 +36,31 @@ namespace WeatherTest.WebApp.Models
 
 		public IEnumerable<SelectListItem> WindSpeedUnits { get; set; }
 
-		public async Task RefreshValuesAsync()
+		public Task RefreshValuesAsync()
 		{
-			var respSyncTasks = Responses.Select(r => r.SyncronizeValuesAsync()).ToList();
-			while (respSyncTasks.Count() > 0)
+			//var respSyncTasks = Responses.Select(r => r.SyncronizeValuesAsync()).ToList();
+			//while (respSyncTasks.Count() > 0)
+			//{
+			//	var respSyncDone = await Task.WhenAny(respSyncTasks);
+			//	respSyncTasks.Remove(respSyncDone);
+			//}
+
+			var tsc = new TaskCompletionSource<object>();
+			Task.Run(delegate
 			{
-				var respSyncDone = await Task.WhenAny(respSyncTasks);
-				respSyncTasks.Remove(respSyncDone);
-			}
+				var averageBaseTemperature =
+					new Measurement(TemperatureUnit.BaseUnit, Responses.Average(r => r.Temperature.BaseValue));
+				AverageTemperature = averageBaseTemperature.ConvertTo(TemperatureUnit);
 
-			AverageTemperature = new Measurement(TemperatureUnit, Responses.Average(r => r.Temperature.BaseValue));
-			AverageWindSpeed = new Measurement(WindSpeedUnit, Responses.Average(r => r.WindSpead.BaseValue));
+				var averageBaseWindSpeed =
+					new Measurement(WindSpeedUnit.BaseUnit, Responses.Average(r => r.WindSpead.BaseValue));
+				AverageWindSpeed = averageBaseWindSpeed.ConvertTo(WindSpeedUnit);
 
-			Location = NewLocation;
+				Location = NewLocation;
+				tsc.SetResult(null);
+			});
+
+			return tsc.Task;
 		}
 	}
 }

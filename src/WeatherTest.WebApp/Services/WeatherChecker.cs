@@ -29,8 +29,7 @@ namespace WeatherTest.WebApp.Services
 			if (string.IsNullOrWhiteSpace(location))
 				return responses;
 
-			var checkTasks = providers
-				.Select(p => CheckFromProvider(p, location)).ToList();
+			var checkTasks = providers.Select(p => CheckFromProvider(p, location)).ToList();
 			while (checkTasks.Count > 0)
 			{
 				var finishedCheckTask = await Task.WhenAny(checkTasks);

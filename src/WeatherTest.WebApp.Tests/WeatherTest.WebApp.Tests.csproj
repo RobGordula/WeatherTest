@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\WeatherTest.WebApp\WeatherTest.WebApp.csproj" />
+    <ProjectReference Include="..\WeatherTest.WebApp\WeatherTest.WebApp.csproj" />
   </ItemGroup>
 
   <ItemGroup>

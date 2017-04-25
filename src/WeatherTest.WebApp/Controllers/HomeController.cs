@@ -48,8 +48,8 @@ namespace WeatherTest.WebApp.Controllers
 
 		async Task CheckWeather(WeatherViewModel vm)
 		{
-			vm.TemperatureUnit = measurements.Find(vm.TemperatureUnit.Id);
-			vm.WindSpeedUnit = measurements.Find(vm.WindSpeedUnit.Id);
+			vm.TemperatureUnit = measurements.TemperatureUnits.First(t => t.Id == vm.TemperatureUnit.Id);
+			vm.WindSpeedUnit = measurements.WindSpeedUnits.First(t => t.Id == vm.WindSpeedUnit.Id);
 			vm.Responses = await weatherChecker.CheckAsync(vm.NewLocation);
 
 			await vm.RefreshValuesAsync();
