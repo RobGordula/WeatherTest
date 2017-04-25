@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,22 +9,18 @@ namespace WeatherTest.WebApp.Controllers
 {
 	public class HomeController : Controller
 	{
-		readonly IOptions<UnitOfMeasure> supportedUnitOfMeasure;
+		readonly IUnitOfMeasurementsService measurements;
 
 		readonly IWeatherChecker weatherChecker;
 
-		readonly IUnitConversionService unitConversionService;
-
 		public HomeController(
-			IWeatherChecker weatherChecker,
-			IOptions<UnitOfMeasure> supportedUnitOfMeasure,
-			IUnitConversionService unitConversionService)
+			IUnitOfMeasurementsService measurements,
+			IWeatherChecker weatherChecker)
 		{
-			this.supportedUnitOfMeasure =
-				supportedUnitOfMeasure ?? throw new ArgumentNullException(nameof(supportedUnitOfMeasure));
-			this.weatherChecker = weatherChecker ?? throw new ArgumentNullException(nameof(weatherChecker));
-			this.unitConversionService =
-				unitConversionService ?? throw new ArgumentNullException(nameof(unitConversionService));
+			this.measurements = measurements
+				?? throw new ArgumentNullException(nameof(measurements));
+			this.weatherChecker = weatherChecker
+				?? throw new ArgumentNullException(nameof(weatherChecker));
 		}
 
 		[HttpGet("")]
@@ -33,9 +28,9 @@ namespace WeatherTest.WebApp.Controllers
 		{
 			var vm = new WeatherViewModel
 			{
-				Location = "bournemouth",
-				TemperatureUnit = new Unit { Code = "Cel" },
-				WindSpeedUnit = new Unit { Code = "MPH" }
+				NewLocation = "bournemouth",
+				TemperatureUnit = measurements.TemperatureUnits.ElementAt(0),
+				WindSpeedUnit = measurements.WindSpeedUnits.ElementAt(0)
 			};
 			await CheckWeather(vm);
 
@@ -53,37 +48,14 @@ namespace WeatherTest.WebApp.Controllers
 
 		async Task CheckWeather(WeatherViewModel vm)
 		{
-			vm.TemperatureUnit = supportedUnitOfMeasure.Value.Temperature
-				.Single(t => t.Code.Equals(vm.TemperatureUnit.Code, StringComparison.CurrentCulture));
-			vm.WindSpeedUnit = supportedUnitOfMeasure.Value.WindSpeed
-				.Single(w => w.Code.Equals(vm.WindSpeedUnit.Code, StringComparison.CurrentCulture));
-			vm.Responses = await weatherChecker.CheckAsync(vm.Location);
+			vm.TemperatureUnit = measurements.Find(vm.TemperatureUnit.Id);
+			vm.WindSpeedUnit = measurements.Find(vm.WindSpeedUnit.Id);
+			vm.Responses = await weatherChecker.CheckAsync(vm.NewLocation);
 
-			ConvertViewModelAverageUnit(vm);
+			await vm.RefreshValuesAsync();
 		}
 
-		void ConvertViewModelAverageUnit(WeatherViewModel vm)
-		{
-			var temperatureBaseUnit = supportedUnitOfMeasure.Value.Temperature.Single(u => u.BaseUnit);
-			var vmTemperatureUnit = vm.TemperatureUnit;
-			if (temperatureBaseUnit.Code == vmTemperatureUnit.Code)
-				vm.AverageTemperature = vm.AverageTemperatureBaseUnitValue;
-			else
-				vm.AverageTemperature = unitConversionService
-					.Convert(temperatureBaseUnit, vmTemperatureUnit, vm.AverageTemperatureBaseUnitValue);
-
-			var windSpeedBaseUnit = supportedUnitOfMeasure.Value.WindSpeed.Single(u => u.BaseUnit);
-			var vmWindSpeedUnit = vm.WindSpeedUnit;
-			if (windSpeedBaseUnit.Code == vmWindSpeedUnit.Code)
-				vm.AverageWindSpeed = vm.AverageWindSpeedBaseUnitValue;
-			else
-				vm.AverageWindSpeed = unitConversionService
-					.Convert(windSpeedBaseUnit, vmWindSpeedUnit, vm.AverageWindSpeedBaseUnitValue);
-		}
-
-		public IActionResult Error()
-		{
-			return View();
-		}
+		public IActionResult Error() =>
+			View();
 	}
 }

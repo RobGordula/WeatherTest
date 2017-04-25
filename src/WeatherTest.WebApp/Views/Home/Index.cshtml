@@ -7,7 +7,15 @@
 <div class="container">
 	<div class="jumbotron" style="text-align:center;background-color:#fff;padding:48px 0">
 		<h3 style="margin:0" class="text-capitalize">@Model.Location</h3>
-		<h1 style="font-size:100px;font-weight:600;margin:0;color:lightskyblue !important">@Html.Raw(Model.AverageTemperatureDisplay)</h1>
-		<h4 style="margin:0">Wind @Model.AverageWindSpeedDisplay</h4>
+		<h1 style="font-size:100px;font-weight:600;margin:0;color:lightskyblue !important">@Html.Raw(Model.AverageTemperature)</h1>
+		<h4 style="margin:0">Wind @Model.AverageWindSpeed</h4>
 	</div>
 </div>
+
+
+@section Scripts {
+	@{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+	<script>
+		$("select").change(() => $("form").submit());
+	</script>
+}

@@ -1,0 +1,16 @@
+﻿{
+	"WeatherProvider": [
+		{
+			"Name": "AccuWeather",
+			"EndPoint": "http://localhost:50370/api/weather",
+			"TemperatureUnitId": "63220210-491a-474b-8ea3-6113d17e6b98",
+			"WindSpeedUnitId": "7a73bc9e-efc4-4f20-a117-3d676cbbfd26"
+		},
+		{
+			"Name": "BBCWeather",
+			"EndPoint": "http://localhost:50341/api/weather",
+			"TemperatureUnitId": "5d364ba0-4045-4dd2-b11f-bbac3b73a526",
+			"WindSpeedUnitId": "d26f20e8-f7f0-448f-935a-e029299e0f8b"
+		}
+	]
+}

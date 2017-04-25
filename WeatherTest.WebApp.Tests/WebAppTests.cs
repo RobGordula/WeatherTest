@@ -28,10 +28,10 @@ namespace WeatherTest.WebApp.Tests
 		{
 			mockRepo = new MockRepository(MockBehavior.Default) { DefaultValue = DefaultValue.Mock };
 
-			cel = new Unit { BaseUnit = true, Code = "Cel", UnitId = 1 };
-			degF = new Unit { BaseUnit = false, Code = "degF", UnitId = 1 };
-			kph = new Unit { BaseUnit = true, Code = "KPH", UnitId = 2 };
-			mph = new Unit { BaseUnit = false, Code = "MPH", UnitId = 2 };
+			cel = new Unit { BaseUnit = true, Code = "Cel", Id = 1 };
+			degF = new Unit { BaseUnit = false, Code = "degF", Id = 1 };
+			kph = new Unit { BaseUnit = true, Code = "KPH", Id = 2 };
+			mph = new Unit { BaseUnit = false, Code = "MPH", Id = 2 };
 
 			providers = new WeatherProviders();
 			providers.Providers.AddRange(

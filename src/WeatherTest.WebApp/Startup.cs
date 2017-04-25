@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using WeatherTest.WebApp.Models;
+using WeatherTest.WebApp.Models.UnitOfMeasure;
 using WeatherTest.WebApp.Services;
 
 namespace WeatherTest.WebApp
@@ -16,6 +18,8 @@ namespace WeatherTest.WebApp
 				.SetBasePath(env.ContentRootPath)
 				.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
 				.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+				.AddJsonFile($"weatherProviders.json", optional: false, reloadOnChange: true)
+				.AddJsonFile($"unitsOfMeasure.json", optional: false, reloadOnChange: true)
 				.AddEnvironmentVariables();
 			Configuration = builder.Build();
 		}
@@ -25,16 +29,18 @@ namespace WeatherTest.WebApp
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.Configure<WeatherProviders>(
-				options => Configuration.GetSection("WeatherProviders").Bind(options));
-			services.Configure<UnitOfMeasure>(
-				options => Configuration.GetSection("UnitOfMeasure").Bind(options));
+			services.Configure<List<Measure>>(
+				options => Configuration.GetSection("SupportedMeasurement").Bind(options));
+			services.Configure<List<Unit>>(
+				options => Configuration.GetSection("SupportedUnitOfMeasurement").Bind(options));
+			services.Configure<List<WeatherProvider>>(
+				options => Configuration.GetSection("WeatherProvider").Bind(options));
 
 			// Add framework services.
 			services.AddMvc();
 
+			services.AddScoped<IUnitOfMeasurementsService, UnitOfMeasurementsService>();
 			services.AddTransient<IWeatherChecker, WeatherChecker>();
-			services.AddTransient<IUnitConversionService, UnitConversionService>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -12,15 +12,15 @@ The application was creted using the ASP.NET Core Web Application template in Vi
 
 The [layout](src/WeatherTest.WebApp/Views/Shared/_Layout.cshtml) from the application template was modified to have a selector for both the temperature and wind speed within the navigation section of the application. An input box with a search button was included in the navigation section as well.
 
-The weather for Bournemouth with the temperature in &deg;C wind speed in mph is initially displayed when lauching the application. Subsequent queries are done via a full page post back.
+The weather for Bournemouth with the temperature in &deg;C wind speed in mph is initially displayed when lauching the application. Subsequent queries are done via a full page post back. Selecting from any of the dropdowns or clicking of the green button will trigger a post back to the server to get updates for the weather from the weather APIs.
 
 ### Supported Unit of Measurement
 
-A UnitOfMeasure section has been added into the [appsettings.json](src/WeatherTest.WebApp/appsettings.json) to allow for easily adding more unit of measure in the future, as well.
+The application loads the supported unit of measurement details from [unitsOfMeasure.json](src/WeatherTest.WebApp/unitsOfMeasure.json) on startup. Loading it from a JSON file will allow for easily adding more APIs in the future.
 
 ### Weather APIs
 
-A WeatherProviders section has been added into the [appsettings.json](src/WeatherTest.WebApp/appsettings.json) to allow for easily adding more APIs in the future.
+The application loads the settings for weather APIs from [weatherProviders.json](src/WeatherTest.WebApp/weatherProviders.json) on startup. Loading it from a JSON file will allow for easily adding more APIs in the future.
 
 ### Weather Checker Service
 

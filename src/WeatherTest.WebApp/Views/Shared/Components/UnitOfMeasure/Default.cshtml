@@ -4,6 +4,6 @@
 }
 
 <div class="form-group">
-	<select asp-for="@vm.TemperatureUnit.Code" asp-items="Model.UnitOfMeasureViewModel.TemperatureUnits" class="form-control"></select>
-	<select asp-for="@vm.WindSpeedUnit.Code" asp-items="Model.UnitOfMeasureViewModel.WindSpeedUnits" class="form-control"></select>
+	<select asp-for="@vm.TemperatureUnit.Id" asp-items="Model.TemperatureUnits" class="form-control"></select>
+	<select asp-for="@vm.WindSpeedUnit.Id" asp-items="Model.WindSpeedUnits" class="form-control"></select>
 </div>

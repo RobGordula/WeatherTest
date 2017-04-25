@@ -1,0 +1,57 @@
+﻿// Guids to use for the MeasurementId of the unit of meaurement quantifies
+//
+//		Temperature: "b2700d02-052c-48ba-afa3-3f01bb87a05a"
+//		Wind Speed:  "36d185d9-5784-4cad-bde0-917f0754cbc1"
+//
+
+{
+	"SupportedMeasurement": [
+		{
+			"Id": "b2700d02-052c-48ba-afa3-3f01bb87a05a",
+			"Name": "Temperature"
+		},
+		{
+			"Id": "36d185d9-5784-4cad-bde0-917f0754cbc1",
+			"Name": "Wind Speed"
+		}
+	],
+
+	"SupportedUnitOfMeasurement": [
+		{
+			"IsBaseUnit": true,
+			"Code": "Cel",
+			"Id": "5d364ba0-4045-4dd2-b11f-bbac3b73a526",
+			"MeasurementId": "b2700d02-052c-48ba-afa3-3f01bb87a05a",
+			"Scale": "1.0",
+			"Shift": "0.0",
+			"Symbol": "&deg;C"
+		},
+		{
+			"IsBaseUnit": false,
+			"Code": "degF",
+			"Id": "63220210-491a-474b-8ea3-6113d17e6b98",
+			"MeasurementId": "b2700d02-052c-48ba-afa3-3f01bb87a05a",
+			"Scale": "1.8",
+			"Shift": "32.0",
+			"Symbol": "&deg;F"
+		},
+		{
+			"IsBaseUnit": false,
+			"Id": "7a73bc9e-efc4-4f20-a117-3d676cbbfd26",
+			"MeasurementId": "36d185d9-5784-4cad-bde0-917f0754cbc1",
+			"Code": "MPH",
+			"Symbol": "mph",
+			"Scale": "0.6",
+			"Shift": "0.0"
+		},
+		{
+			"IsBaseUnit": true,
+			"Id": "d26f20e8-f7f0-448f-935a-e029299e0f8b",
+			"MeasurementId": "36d185d9-5784-4cad-bde0-917f0754cbc1",
+			"Code": "KPH",
+			"Symbol": "kph",
+			"Scale": "1.0",
+			"Shift": "0.0"
+		}
+	]
+}

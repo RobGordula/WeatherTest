@@ -1,20 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using WeatherTest.WebApp.Models;
+using WeatherTest.WebApp.Services;
 
 namespace WeatherTest.WebApp.ViewComponents
 {
 	public class UnitOfMeasureViewComponent : ViewComponent
 	{
-		readonly IOptions<UnitOfMeasure> supportedUnitOfMeasure;
+		readonly IUnitOfMeasurementsService measurements;
 
-		public UnitOfMeasureViewComponent(IOptions<UnitOfMeasure> supportedUnitOfMeasure) =>
-			this.supportedUnitOfMeasure = supportedUnitOfMeasure ?? throw new ArgumentNullException(nameof(supportedUnitOfMeasure));
+		public UnitOfMeasureViewComponent(IUnitOfMeasurementsService measurements) =>
+			this.measurements = measurements ?? throw new ArgumentNullException(nameof(measurements));
 
 		public Task<IViewComponentResult> InvokeAsync(WeatherViewModel vm)
 		{
@@ -22,29 +22,20 @@ namespace WeatherTest.WebApp.ViewComponents
 			Task.Run(
 				delegate
 				{
-					var temperatureUnits = supportedUnitOfMeasure.Value.Temperature;
-					var windSpeedUnits = supportedUnitOfMeasure.Value.WindSpeed;
-					vm.UnitOfMeasureViewModel = new UnitOfMeasureViewModel
-					{
-						TemperatureUnits = temperatureUnits
-							.Select(t =>
-								new SelectListItem
-								{
-									Text = WebUtility.HtmlDecode(t.Symbol),
-									Value = t.Code,
-									Selected = t.Code.Equals(vm.TemperatureUnit.Code, StringComparison.CurrentCulture)
-								})
-							.ToList(),
-						WindSpeedUnits = windSpeedUnits
-							.Select(w =>
-								new SelectListItem
-								{
-									Text = w.Symbol,
-									Value = w.Code,
-									Selected = w.Code.Equals(vm.WindSpeedUnit.Code, StringComparison.CurrentCulture)
-								})
-							.ToList()
-					};
+					vm.TemperatureUnits = measurements.TemperatureUnits.Select(t =>
+							new SelectListItem
+							{
+								Text = WebUtility.HtmlDecode(t.Symbol),
+								Value = t.Id.ToString(),
+								Selected = t.Id == vm.TemperatureUnit.Id
+							});
+						vm.WindSpeedUnits = measurements.WindSpeedUnits.Select(w =>
+							new SelectListItem
+							{
+								Text = w.Symbol,
+								Value = w.Id.ToString(),
+								Selected = w.Id == vm.WindSpeedUnit.Id
+							});
 
 					tsc.SetResult(View(vm));
 				});
